@@ -1,0 +1,30 @@
+{
+    "time": {
+        "timezone": {
+            "value": "Dateline Standard Time",
+            "abbr": "DST",
+            "offset": -12,
+            "isdst": false,
+            "text": "(UTC-12:00) International Date Line West",
+            "utc": [
+              "Etc/GMT+12"
+            ]
+          }
+    },
+    "temperature": {
+        "off": true,
+        "onTime": 10,
+        "frequency": 2
+    },
+    "brightness": {
+        "auto": false,
+        "brightness": 80
+    },
+    "color": {
+        "color": "#8E00FF"
+    },
+    "wifi": {
+        "network": "",
+        "password": ""
+    }
+}
