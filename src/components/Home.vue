@@ -23,7 +23,7 @@
           >
             <v-card flat tile class="d-flex">
               <v-img
-                :src="`/assets/${n}.jpg`"
+                :src="`/assets/${n}.JPG`"
                 aspect-ratio="1"
                 class="grey lighten-2"
               >
