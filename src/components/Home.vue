@@ -9,7 +9,11 @@
             With help of Maren, Maarten, Gabi & Ralf
           </v-card-subtitle>
           <v-card-text>
-            This product is build with love ❤ 
+            This product is build with love ❤ <br/>
+            // Nog een productlijst ofzo toevoegen <br/>
+            // Schermafbeeldingen van de CAD toevoegen <br/>
+            // Zorgen dat de rpi draait zonder interface <br/>
+            ...
           </v-card-text>
         </v-card>
 
