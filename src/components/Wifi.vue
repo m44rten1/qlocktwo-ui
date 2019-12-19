@@ -46,14 +46,14 @@
       },
     },
     created() {
-        this.axios.get(process.env.VUE_APP_API).then((response) => {
+        this.axios.get(process.env.VUE_APP_API + 'settings').then((response) => {
             this.settings = response.data;
         })
     },
     methods: {
       save() {
         this.saveDisabled = true;
-        this.axios.post(process.env.VUE_APP_API, this.settings);
+        this.axios.post(process.env.VUE_APP_API + 'settings', this.settings);
       }
     }
   }

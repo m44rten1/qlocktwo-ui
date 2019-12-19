@@ -13,6 +13,7 @@
             // Nog een productlijst ofzo toevoegen <br/>
             // Schermafbeeldingen van de CAD toevoegen <br/>
             // Zorgen dat de rpi draait zonder interface <br/>
+            // Kerstboom tonen? Andere symbolen tonen op speciale dagen? <br/>
             ...
           </v-card-text>
         </v-card>
