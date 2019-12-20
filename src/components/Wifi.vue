@@ -1,11 +1,15 @@
 <template>
-      <div v-if="settings">
+<!-- TODO: Toon huidig verbonden netwerk: ENDPOINT: /settings/current-connection , zie ook greenshot screenshot -->
+<!-- TODO: verwijder true -->
+      <div v-if="true || settings">
+        <!-- TODO: add an icon -->
+        <p>Currently the clock is <b v-if="!connectedToInternet">not</b> connected to the internet.</p><br/>
             <v-row>
               <v-select
                 :items="items"
-                label="Network"
+                :label="networkPlaceholder"
                 solo
-                v-model="settings.wifi.network"
+                v-model="settings.wifi.ssid"
               ></v-select>
             </v-row>
             <v-row>
@@ -20,8 +24,8 @@
             </v-row>
             <v-spacer class="col"></v-spacer>
             <v-row>
-              <v-btn :disabled="saveDisabled" @click="save">
-                Save
+              <v-btn :disabled="connectDisabled" @click="connectToNetwork">
+                Connect
               </v-btn>
             </v-row>
       </div>
@@ -32,28 +36,50 @@
     data: () => ({
       items: ['Wifi-hotspot', 'GuestNetwork', 'Surf me Pleazzzz!', 'Protected wifi network'],
       show1: false,
-      saveDisabled: true,
-      settings: null
-    }),
-    watch: {
+      connectDisabled: true,  // TODO: set rules for this
+      //settings: null  TODO: Dit terug verwijderen en de andere settings hieronder weg doen
       settings: {
-        deep: true,
-        handler(newValue, oldValue) {
-          if ( oldValue != null) {
-            this.saveDisabled = false;
-          }
+        wifi: {
+          ssid: "",
+          password: ""
         }
       },
-    },
+      networkPlaceholder: "Searching for WiFi networks...",
+      connectionInterval: null,
+      connectedToInternet: false,
+
+    }),
     created() {
-        this.axios.get(process.env.VUE_APP_API + 'settings').then((response) => {
-            this.settings = response.data;
-        })
+        this.axios.get(process.env.VUE_APP_API + 'settings/wifi-networks').then((response) => {
+            // TODO: uncomment and check
+            console.log(response);
+            //this.items = response.data;
+            this.networkPlaceholder = this.items.length == 0 ? "No network found" : "Select a network";
+
+        }).catch(err => {
+          this.networkPlaceholder = "There was a problem with finding networks";
+        });
+
+        this.connectionInterval = setInterval(this.doConnectionCheck, 500);
+
+    },
+    destroyed() {
+      clearInterval(this.doConnectionCheck);
     },
     methods: {
-      save() {
-        this.saveDisabled = true;
-        this.axios.post(process.env.VUE_APP_API + 'settings', this.settings);
+      connectToNetwork() {
+        // TODO: finish this
+        //this.axios.post(process.env.VUE_APP_API + 'settings', this.settings);
+      },
+      doConnectionCheck() {
+        this.axios.get(process.env.VUE_APP_API + 'settings/connected-to-internet').then((response) => {
+            // TODO: uncomment and check
+            console.log(response);
+            //this.items = response.data;
+            this.connectedToInternet = response;
+        }).catch(err => {
+          this.connectedToInternet = false;
+        })
       }
     }
   }

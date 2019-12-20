@@ -9,7 +9,8 @@
       <v-list dense>
         <v-list-item @click="changePage('Home')">
           <v-list-item-action>
-            <v-icon>mdi-home</v-icon>
+            <!-- <v-icon>{{ mdiHome }}</v-icon> -->
+            <span class="mi-toys"></span>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Home</v-list-item-title>
@@ -18,7 +19,7 @@
 
         <v-list-item @click="changePage('Time')">
           <v-list-item-action>
-            <v-icon>mdi-earth</v-icon>
+            <v-icon>earth</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Timezone</v-list-item-title>
@@ -98,6 +99,11 @@
 </template>
 
 <script>
+  import {
+    mdiHome,
+    mdiEarth
+  } from '@mdi/js'
+
   export default {
     name: 'App',
     props: {
@@ -106,7 +112,11 @@
     data: () => ({
       drawer: null,
       component: null,
-      currentPage: 'Home'
+      currentPage: 'Home',
+      icons: {
+        mdiHome,
+        mdiEarth
+      }
     }),
     created() {
       this.component = () => import("@/components/Home.vue")

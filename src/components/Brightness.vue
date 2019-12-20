@@ -52,7 +52,7 @@ export default {
     });
 
     // Brightness polling
-    this.interval = setInterval(_ => {
+    this.interval = setInterval(() => {
       this.axios
         .get(process.env.VUE_APP_API + "measurements/brightness")
         .then(response => {

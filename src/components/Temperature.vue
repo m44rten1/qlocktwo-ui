@@ -62,7 +62,7 @@ export default {
     });
 
     // Temperature polling
-    this.interval = setInterval(_ => {
+    this.interval = setInterval(() => {
       this.axios.get(process.env.VUE_APP_API + 'measurements/temperature').then(response => {
         this.measurement = response.data;
         console.log(this.measurement);
