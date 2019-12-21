@@ -1,7 +1,14 @@
 <template>
 <!-- TODO: Toon huidig verbonden netwerk: ENDPOINT: /settings/current-connection , zie ook greenshot screenshot -->
+<!-- TODO: wifi connect deel niet tonen als er internet verbinding is -->
 <!-- TODO: verwijder true -->
       <div v-if="true || settings">
+        <v-alert :value="successAlert" type="success" transition="scale-transition">
+          You have successfuly connected to {{ wifi.ssid }}
+        </v-alert>
+        <v-alert :value="errorAlert" type="error" transition="scale-transition">
+          The clock failed to connect to {{ wifi.ssid }}
+        </v-alert>
         <!-- TODO: add an icon -->
         <p>Currently the clock is <b v-if="!connectedToInternet">not</b> connected to the internet.</p><br/>
             <v-row>
@@ -9,12 +16,12 @@
                 :items="items"
                 :label="networkPlaceholder"
                 solo
-                v-model="settings.wifi.ssid"
+                v-model="wifi.ssid"
               ></v-select>
             </v-row>
             <v-row>
               <v-text-field
-                v-model="settings.wifi.password"
+                v-model="wifi.psk"
                 :append-icon="show1 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
                 :type="show1 ? 'text' : 'password'"
                 name="input-10-1"
@@ -28,55 +35,95 @@
                 Connect
               </v-btn>
             </v-row>
+            <v-overlay :value="loading">
+              <v-progress-circular indeterminate size="64"></v-progress-circular>
+            </v-overlay>
       </div>
 </template>
 
 <script>
   export default {
     data: () => ({
-      items: ['Wifi-hotspot', 'GuestNetwork', 'Surf me Pleazzzz!', 'Protected wifi network'],
+      items: [],
       show1: false,
-      connectDisabled: true,  // TODO: set rules for this
-      //settings: null  TODO: Dit terug verwijderen en de andere settings hieronder weg doen
-      settings: {
-        wifi: {
-          ssid: "",
-          password: ""
-        }
+      connectDisabled: true,
+      wifi: {
+        ssid: "",
+        psk: "",
+        timeout: 8000,
       },
+      loading: false,
       networkPlaceholder: "Searching for WiFi networks...",
       connectionInterval: null,
       connectedToInternet: false,
+      successAlert: false,
+      errorAlert: false,
 
     }),
     created() {
         this.axios.get(process.env.VUE_APP_API + 'settings/wifi-networks').then((response) => {
-            // TODO: uncomment and check
-            console.log(response);
-            //this.items = response.data;
+            this.items = response.data.map(item => item.ssid);
             this.networkPlaceholder = this.items.length == 0 ? "No network found" : "Select a network";
 
         }).catch(err => {
           this.networkPlaceholder = "There was a problem with finding networks";
         });
 
-        this.connectionInterval = setInterval(this.doConnectionCheck, 500);
+        this.connectionInterval = setInterval(this.doConnectionCheck, 2000);
 
+    },
+    computed: {
+      connectDisabled() {
+        return !(this.wifi.ssid.length > 0 && this.wifi.psk.length >= 8);
+      },
+    },
+    watch: {
+      wifi: {
+        handler() {
+          this.connectDisabled = !(this.wifi.ssid.length > 0 && this.wifi.psk.length >= 8);
+        },
+        deep: true,
+      },
+      successAlert() {
+        if(this.successAlert) {
+          setTimeout(() => {
+            this.successAlert = false;
+          }, 3000);
+        }
+      },
+      errorAlert() {
+        if(this.errorAlert) {
+          setTimeout(() => {
+            this.errorAlert = false;
+          }, 3000);
+        }
+      }
     },
     destroyed() {
       clearInterval(this.doConnectionCheck);
     },
     methods: {
       connectToNetwork() {
+        this.connectDisabled = true;
+        this.loading = true;
         // TODO: finish this
-        //this.axios.post(process.env.VUE_APP_API + 'settings', this.settings);
+        this.axios.post(process.env.VUE_APP_API + 'settings/connect-to-wifi', this.wifi).then(response => {
+          console.log(response);
+          if(response.data) {
+            this.successAlert = true;
+          } else {
+            this.errorAlert = true;
+          }
+          
+        }).catch(error => {
+          this.errorAlert = true;
+        }).finally(() => { 
+          this.loading = false;
+        })
       },
       doConnectionCheck() {
         this.axios.get(process.env.VUE_APP_API + 'settings/connected-to-internet').then((response) => {
-            // TODO: uncomment and check
-            console.log(response);
-            //this.items = response.data;
-            this.connectedToInternet = response;
+            this.connectedToInternet = response.data;
         }).catch(err => {
           this.connectedToInternet = false;
         })
