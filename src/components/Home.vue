@@ -3,7 +3,7 @@
       <v-container fluid>
         <v-card>
           <v-card-title>
-            <p>This product was built with love &nbsp; ddf❤ </p><br/>
+            <p>This product was built with love ❤ </p><br/>
           </v-card-title>
           <v-card-subtitle>
             <br/>

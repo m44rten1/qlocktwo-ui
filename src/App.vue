@@ -9,8 +9,7 @@
       <v-list dense>
         <v-list-item @click="changePage('Home')">
           <v-list-item-action>
-            <!-- <v-icon>{{ mdiHome }}</v-icon> -->
-            <span class="mi-toys"></span>
+            <span class="mi mi-home"></span>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Home</v-list-item-title>
@@ -19,7 +18,7 @@
 
         <v-list-item @click="changePage('Time')">
           <v-list-item-action>
-            <v-icon>earth</v-icon>
+            <span class="mi mi-language"></span>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Timezone</v-list-item-title>
@@ -28,7 +27,7 @@
 
         <v-list-item @click="changePage('Temperature')">
           <v-list-item-action>
-            <v-icon>mdi-thermometer</v-icon>
+            <span class="mi mi-timeline"></span>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Temperature</v-list-item-title>
@@ -37,7 +36,7 @@
 
         <v-list-item @click="changePage('Brightness')">
           <v-list-item-action>
-            <v-icon>mdi-brightness-6</v-icon>
+            <span class="mi mi-brightness-medium"></span>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Brightness</v-list-item-title>
@@ -46,7 +45,7 @@
 
         <v-list-item @click="changePage('Color')">
           <v-list-item-action>
-            <v-icon>mdi-palette</v-icon>
+            <span class="mi mi-color-lens"></span>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Color</v-list-item-title>
@@ -55,21 +54,21 @@
 
         <v-list-item @click="changePage('Wifi')">
           <v-list-item-action>
-            <v-icon>mdi-wifi</v-icon>
+            <span class="mi mi-wifi"></span>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Wifi</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item @click="changePage('Fun')">
+        <!-- <v-list-item @click="changePage('Fun')">
           <v-list-item-action>
-            <v-icon>mdi-gamepad-variant</v-icon>
+            <span class="mi mi-videogame-asset"></span>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Fun</v-list-item-title>
           </v-list-item-content>
-        </v-list-item>
+        </v-list-item> -->
 
       </v-list>
     </v-navigation-drawer>
@@ -79,8 +78,8 @@
       color="amber lighten-1"
       dark
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <!-- <v-toolbar-title>KIRSTENS <b>QLockTwo</b></v-toolbar-title> -->
+      <v-btn icon><span class="mi mi-dehaze" @click.stop="drawer = !drawer"></span></v-btn>
+      <!-- <v-app-bar-nav-icon class="mi mi-dehaze" @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
       <v-toolbar-title>{{ currentPage }}</v-toolbar-title>
     </v-app-bar>
 
@@ -99,11 +98,6 @@
 </template>
 
 <script>
-  import {
-    mdiHome,
-    mdiEarth
-  } from '@mdi/js'
-
   export default {
     name: 'App',
     props: {
@@ -113,10 +107,6 @@
       drawer: null,
       component: null,
       currentPage: 'Home',
-      icons: {
-        mdiHome,
-        mdiEarth
-      }
     }),
     created() {
       this.component = () => import("@/components/Home.vue")

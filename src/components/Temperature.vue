@@ -14,7 +14,7 @@
         <v-slider
           v-model="settings.temperature.onTime"
           label="On time (s)"
-          min="0"
+          min="1"
           max="50"
           thumb-label
         ></v-slider>
@@ -23,7 +23,7 @@
         <v-slider
           v-model="settings.temperature.frequency"
           label="Frequency (min)"
-          min="0"
+          min="1"
           max="15"
           thumb-label
         ></v-slider>
@@ -68,7 +68,7 @@ export default {
         console.log(this.measurement);
         this.showMeasurement = true;
       });
-    }, 300);
+    }, 2000);
   },
   destroyed() {
     clearInterval(this.interval);

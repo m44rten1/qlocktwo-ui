@@ -59,7 +59,7 @@ export default {
           this.measurement = response.data;
           this.showMeasurement = true;
         });
-    }, 300);
+    }, 2000);
   },
   destroyed() {
     clearInterval(this.interval);

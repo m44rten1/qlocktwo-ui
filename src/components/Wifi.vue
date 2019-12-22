@@ -10,7 +10,7 @@
           The clock failed to connect to {{ wifi.ssid }}
         </v-alert>
         <!-- TODO: add an icon -->
-        <p>Currently the clock is <b v-if="!connectedToInternet">not</b> connected to the internet.</p><br/>
+        <p>Currently the clock is <b v-if="!connectedToInternet">not</b> connected to the internet <span :class="{'mi': true, 'mi-wifi': connectedToInternet, 'mi-signal-wifi-off': !connectedToInternet}"></span></p><br/><br/><br/>
             <v-row>
               <v-select
                 :items="items"
@@ -22,7 +22,7 @@
             <v-row>
               <v-text-field
                 v-model="wifi.psk"
-                :append-icon="show1 ? 'mdi-eye-outline' : 'mdi-eye-off-outline'"
+                :append-icon="show1 ? 'mi-visibility' : 'mi-visibility-off'"
                 :type="show1 ? 'text' : 'password'"
                 name="input-10-1"
                 label="Wifi password"
@@ -61,15 +61,16 @@
 
     }),
     created() {
-        this.axios.get(process.env.VUE_APP_API + 'settings/wifi-networks').then((response) => {
-            this.items = response.data.map(item => item.ssid);
-            this.networkPlaceholder = this.items.length == 0 ? "No network found" : "Select a network";
+      this.doConnectionCheck();
+      this.axios.get(process.env.VUE_APP_API + 'settings/wifi-networks').then((response) => {
+          this.items = response.data.map(item => item.ssid).filter(item => item.length > 0);
+          this.networkPlaceholder = this.items.length == 0 ? "No network found" : "Select a network";
 
-        }).catch(err => {
-          this.networkPlaceholder = "There was a problem with finding networks";
-        });
+      }).catch(err => {
+        this.networkPlaceholder = "There was a problem with finding networks";
+      });
 
-        this.connectionInterval = setInterval(this.doConnectionCheck, 2000);
+      this.connectionInterval = setInterval(this.doConnectionCheck, 2000);
 
     },
     computed: {
@@ -100,7 +101,7 @@
       }
     },
     destroyed() {
-      clearInterval(this.doConnectionCheck);
+      clearInterval(this.connectionInterval);
     },
     methods: {
       connectToNetwork() {
